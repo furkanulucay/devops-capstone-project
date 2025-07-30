@@ -146,7 +146,7 @@ class TestAccountService(TestCase):
 
     def test_get_account_list(self):
         """It should get a list of Accounts"""
-        accounts = self._create_accounts(5)
+        self._create_accounts(5)
         response = self.client.get(BASE_URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -161,17 +161,17 @@ class TestAccountService(TestCase):
 
         new_account = response.get_json()
         new_account["name"] = "first account"
-        
-        response = self.client.put(f"{BASE_URL}/{new_account['id']}", json = new_account)
+
+        response = self.client.put(f"{BASE_URL}/{new_account['id']}", json=new_account)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_account = response.get_json()
         self.assertEqual(updated_account["name"], "first account")
-    
+
     def test_account_not_updated(self):
         """It should not Update an Account that is not found"""
         response = self.client.put(f"{BASE_URL}/0")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-    
+
     def test_delete_account(self):
         """It should delete an existing Account"""
         account = self._create_accounts(1)[0]
@@ -202,4 +202,4 @@ class TestAccountService(TestCase):
         """It should return a CORS header"""
         response = self.client.get("/", environ_overrides=HTTPS_ENVIRON)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.headers.get("Access-Control-Allow-Origin"), "*")        
+        self.assertEqual(response.headers.get("Access-Control-Allow-Origin"), "*")
